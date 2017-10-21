@@ -1,6 +1,9 @@
 var bodyParser = require('body-parser')
 var express = require('express')
 
+const got = require('got')
+var MIXMAX_API_KEY
+
 var app = express()
 var input
 
@@ -42,6 +45,20 @@ app.post('/sortedOweChart', function (req, res) {
 app.post('/paymentChain', function (req, res) {
   input = req.body
   res.json(paymentChain(mergeSort(oweChart(input.users))))
+})
+
+app.post('/emailPaymentChain', function (req, res) {
+  input = req.body
+  MIXMAX_API_KEY = input['mixmax-api']
+  var sorted = mergeSort(oweChart(input.users))
+  var chain = paymentChain(sorted)
+  var emails = []
+  for (var i = 0; i < chain.length; i++) {
+    var message = messageCreation(sorted[i], sorted[i + 1], chain[i].amount)
+    send(message)
+    emails.push('Email sent to ' + sorted[i].email)
+  }
+  res.json(emails)
 })
 
 // app.listen(3000)
@@ -116,4 +133,25 @@ function paymentChain (users) {
   }
 
   return chain
+}
+
+function messageCreation (user1, user2, amount) {
+  var signature = '<br><br><p>Sincerely,<br><a href="https://github.com/binhonglee/Breakups">BreakupBills</a></p>'
+  var message = {}
+  message.to = user1.email
+  message.subject = 'Pay ' + user2.name + ' $' + amount
+  message.html = '<p>Please pay ' + user2.name + ' $' + amount + '</p>' + signature
+  return message
+}
+
+function send (message) {
+  got.post('https://api.mixmax.com/v1/send', {
+    body: JSON.stringify({
+      message
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Token': MIXMAX_API_KEY
+    }
+  })
 }

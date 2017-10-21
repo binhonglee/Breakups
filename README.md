@@ -9,15 +9,16 @@ api domain: `https:\\breakups.herokuapp.com\`
 | Type | Call | Request | Response |
 |:-----|:-----|:--------|:---------|
 | `GET` | `help` | - | URL to github repository |
-| `POST` | `total` | [standard format](#standard-format) | `{ "total": 200 }` |
-| `POST` | `perPerson` | [standard format](#standard-format) | `{ "perPerson": 30 }` |
-| `POST` | `oweChart` | [standard format](#standard-format) | [standard format](#standard-format) |
-| `POST` | `sortedOweChart` | [standard format](#standard-format) | [standard format](#standard-format) |
-| `POST` | `paymentChain` | [standard format](#standard-format) | [chain format](#chain-format) |
+| `POST` | `total` | [standard](#standard) / [email](#email) | `{ "total": 200 }` |
+| `POST` | `perPerson` | [standard](#standard) ／ [email](#email) | `{ "perPerson": 30 }` |
+| `POST` | `oweChart` | [standard](#standard) ／ [email](#email) | [standard](#standard) ／ [email](#email) |
+| `POST` | `sortedOweChart` | [standard](#standard) ／ [email](#email) | [standard](#standard) ／ [email](#email) |
+| `POST` | `paymentChain` | [standard](#standard) ／ [email](#email) | [chain](#chain) |
+| `POST` | `emailPaymentChain` | [email](#email) | `["Email sent to user1@domain.com", "Email sent to user2@domain.com"]` |
 
 ## Expected Request / Response
 
-### standard format
+### standard
 
 ```JSON
 {
@@ -38,7 +39,7 @@ api domain: `https:\\breakups.herokuapp.com\`
 }
 ```
 
-### chain format
+### chain
 
 ```JSON
 [
@@ -53,4 +54,29 @@ api domain: `https:\\breakups.herokuapp.com\`
     "amount": 40
   }
 ]
+```
+
+### email
+
+```JSON
+{
+  "users": [
+    {
+      "name": "Person1",
+      "email": "person1@domain.com",
+      "amount": 100
+    },
+    {
+      "name": "Person2",
+      "email": "person2@domain.com",
+      "amount": 50
+    },
+    {
+      "name": "Person3",
+      "email": "person3@domain.com",
+      "amount": 30
+    }
+  ],
+  "mixmax-api": "your-mixmax-api-key"
+}
 ```
