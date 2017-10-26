@@ -2,6 +2,8 @@
 
 Creating a payment chain for bill splitting needs
 
+[![Dependency Status](https://gemnasium.com/badges/github.com/binhonglee/Breakups.svg)](https://gemnasium.com/github.com/binhonglee/Breakups)
+
 api domain: `https:\\breakups.herokuapp.com\`
 
 ## API Call Documentations
