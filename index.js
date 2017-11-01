@@ -7,16 +7,16 @@ var MIXMAX_API_KEY
 var app = express()
 var input
 
-app.use(bodyParser.json({
-  limit: '100mb',
-  type: 'application/json'
-}))
-
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   next()
 })
+
+app.use(bodyParser.json({
+  limit: '100mb',
+  type: 'application/json'
+}))
 
 app.get('/help', function (req, res) {
   res.send('https://github.com/binhonglee/Breakups')
@@ -67,8 +67,8 @@ app.post('/emailPaymentChain', function (req, res) {
   res.json(emails)
 })
 
-app.listen(5000)
-// app.listen(process.env.PORT)
+// app.listen(5000)
+app.listen(process.env.PORT)
 
 function total (input) {
   var total = 0
