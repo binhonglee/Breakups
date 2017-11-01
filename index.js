@@ -77,8 +77,8 @@ app.post('/emailPaymentChain', function (req, res) {
   res.json(emails)
 })
 
-app.listen(5000)
-// app.listen(process.env.PORT)
+// app.listen(5000)
+app.listen(process.env.PORT)
 
 function total (input) {
   var total = 0
