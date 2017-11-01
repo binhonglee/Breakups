@@ -77,8 +77,8 @@ app.post('/emailPaymentChain', function (req, res) {
   res.json(emails)
 })
 
-// app.listen(5000)
-app.listen(process.env.PORT)
+app.listen(5000)
+// app.listen(process.env.PORT)
 
 function total (input) {
   var total = 0
@@ -158,7 +158,7 @@ function paymentChain (users) {
 function paymentNetwork (users, backup) {
   var chain = []
 
-  while (chain.length < users.length && backup.length > 0) {
+  while (chain.length < users.length && backup.length > 1) {
     if (backup.length > 0 && backup[0].amount === 0) {
       backup.splice(0, 1)
     } else if ((0 !== (backup.length - 1)) && (backup[0].amount === (backup[backup.length - 1].amount * -1))) {
@@ -176,7 +176,7 @@ function paymentNetwork (users, backup) {
     }
   }
   
-  if (backup.length > 0) {
+  if (backup.length > 1) {
     return paymentChain(users)
   } else {
     return chain
