@@ -18,8 +18,16 @@ app.use(bodyParser.json({
   type: 'application/json'
 }))
 
+app.get('/', function (req, res) {
+  res.redirect('https://binhonglee.github.io/Breakups/')
+})
+
 app.get('/help', function (req, res) {
-  res.send('https://github.com/binhonglee/Breakups')
+  res.redirect('https://github.com/binhonglee/Breakups')
+})
+
+app.get('/webapp', function (req, res) {
+  res.redirect('https://breakups-webapp.herokuapp.com/')
 })
 
 app.post('/total', function (req, res) {
@@ -50,7 +58,9 @@ app.post('/sortedOweChart', function (req, res) {
 
 app.post('/paymentChain', function (req, res) {
   input = req.body
-  res.json(paymentChain(mergeSort(oweChart(input.users))))
+  var sorted1 = mergeSort(oweChart(input.users))
+  var sorted2 = mergeSort(oweChart(input.users))
+  res.json(paymentNetwork(sorted1, sorted2))
 })
 
 app.post('/emailPaymentChain', function (req, res) {
@@ -67,8 +77,8 @@ app.post('/emailPaymentChain', function (req, res) {
   res.json(emails)
 })
 
-// app.listen(5000)
-app.listen(process.env.PORT)
+app.listen(5000)
+// app.listen(process.env.PORT)
 
 function total (input) {
   var total = 0
@@ -129,6 +139,10 @@ function paymentChain (users) {
   var stack = 0
 
   for (var i = 0; i < users.length - 1; i++) {
+    while (users[i + 1].amount === 0) {
+      users.splice((i + 1), 1)
+    }
+
     var item = {'from': '', 'to': '', 'amount': 0}
     item['from'] = users[i].name
     item['to'] = users[i + 1].name
@@ -139,6 +153,43 @@ function paymentChain (users) {
   }
 
   return chain
+}
+
+function paymentNetwork (users, backup) {
+  var chain = []
+
+  while (chain.length < users.length && backup.length > 0) {
+    if (backup.length > 0 && backup[0].amount === 0) {
+      backup.splice(0, 1)
+    } else if ((0 !== (backup.length - 1)) && (backup[0].amount === (backup[backup.length - 1].amount * -1))) {
+      chain.push(createItem(backup[0].name, backup[backup.length - 1].name, backup[backup.length - 1].amount))
+      backup.splice((0), 1)
+      backup.splice((backup.length - 1), 1)
+    } else if (backup[0].amount * -1 < (backup[backup.length - 1].amount)) {
+      chain.push(createItem(backup[0].name, backup[backup.length - 1].name, backup[0].amount * -1))
+      backup[backup.length - 1].amount += backup[0].amount
+      backup.splice((0), 1)
+    } else {
+      chain.push(createItem(backup[0].name, backup[backup.length - 1].name, backup[backup.length - 1].amount))
+      backup[0].amount += backup[backup.length - 1].amount
+      backup.splice((backup.length - 1), 1)
+    }
+  }
+  
+  if (backup.length > 0) {
+    return paymentChain(users)
+  } else {
+    return chain
+  }
+}
+
+function createItem (from, to, amount) {
+  console.log('from: ' + from + ' to: ' + to + ' amount: ' + amount)
+  var item = {'from': '', 'to': '', 'amount': 0}
+  item['from'] = from
+  item['to'] = to
+  item['amount'] = amount
+  return item
 }
 
 function messageCreation (user1, user2, amount) {

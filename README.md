@@ -1,22 +1,24 @@
 # Breakups
 
-Creating a payment chain for bill splitting needs
+Creating a payment chain for bill splitting needs. [Try it](https://breakups-webapp.herokuapp.com/) out now!
 
 [![Dependency Status](https://gemnasium.com/badges/github.com/binhonglee/Breakups.svg)](https://gemnasium.com/github.com/binhonglee/Breakups)
 
-api domain: `https:\\breakups.herokuapp.com\`
+api domain: `https://breakups.herokuapp.com/`
 
 ## API Call Documentations
 
 | Type | Call | Request | Response |
 |:-----|:-----|:--------|:---------|
-| `GET` | `help` | - | URL to github repository |
-| `POST` | `total` | [standard](#standard) / [email](#email) | `{ "total": 200 }` |
-| `POST` | `perPerson` | [standard](#standard) ／ [email](#email) | `{ "perPerson": 30 }` |
-| `POST` | `oweChart` | [standard](#standard) ／ [email](#email) | [standard](#standard) ／ [email](#email) |
-| `POST` | `sortedOweChart` | [standard](#standard) ／ [email](#email) | [standard](#standard) ／ [email](#email) |
-| `POST` | `paymentChain` | [standard](#standard) ／ [email](#email) | [chain](#chain) |
-| `POST` | `emailPaymentChain` | [email](#email) | `["Email sent to user1@domain.com", "Email sent to user2@domain.com"]` |
+| `GET` | `/` | - | redirects to [documentation page](https://binhonglee.github.io/Breakups) |
+| `GET` | `/help` | - | redirects to github repository |
+| `GET` | `/webapp` | - | redirects to the [webapp](https://breakups-webapp.herokuapp.com/) |
+| `POST` | `/emailPaymentChain` | [email](#email) | `["Email sent to user1@domain.com", "Email sent to user2@domain.com"]` |
+| `POST` | `/total` | [standard](#standard) / [email](#email) | `{ "total": 200 }` |
+| `POST` | `/oweChart` | [standard](#standard) ／ [email](#email) | [standard](#standard) ／ [email](#email) |
+| `POST` | `/paymentChain` | [standard](#standard) ／ [email](#email) | [chain](#chain) |
+| `POST` | `/perPerson` | [standard](#standard) ／ [email](#email) | `{ "perPerson": 30 }` |
+| `POST` | `/sortedOweChart` | [standard](#standard) ／ [email](#email) | [standard](#standard) ／ [email](#email) |
 
 ## Expected Request / Response
 
