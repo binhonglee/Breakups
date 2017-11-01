@@ -12,42 +12,48 @@ app.use(bodyParser.json({
   type: 'application/json'
 }))
 
-app.get('/help', function (req, res) {
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
+
+app.get('/help', function (req, res, next) {
   res.send('https://github.com/binhonglee/Breakups')
 })
 
-app.post('/total', function (req, res) {
+app.post('/total', function (req, res, next) {
   input = req.body
   var toReturn = { 'total': 0 }
   toReturn.total = total(input.users)
   res.json(toReturn)
 })
 
-app.post('/perPerson', function (req, res) {
+app.post('/perPerson', function (req, res, next) {
   input = req.body
   var toReturn = { 'perPerson': 0 }
   toReturn.perPerson = (total(input.users)) / input.users.length
   res.json(toReturn)
 })
 
-app.post('/oweChart', function (req, res) {
+app.post('/oweChart', function (req, res, next) {
   input = req.body
   input.users = oweChart(input.users)
   res.send(input)
 })
 
-app.post('/sortedOweChart', function (req, res) {
+app.post('/sortedOweChart', function (req, res, next) {
   input = req.body
   input.users = mergeSort(oweChart(input.users))
   res.send(input)
 })
 
-app.post('/paymentChain', function (req, res) {
+app.post('/paymentChain', function (req, res, next) {
   input = req.body
   res.json(paymentChain(mergeSort(oweChart(input.users))))
 })
 
-app.post('/emailPaymentChain', function (req, res) {
+app.post('/emailPaymentChain', function (req, res, next) {
   input = req.body
   MIXMAX_API_KEY = input['mixmax-api']
   var sorted = mergeSort(oweChart(input.users))
@@ -61,8 +67,8 @@ app.post('/emailPaymentChain', function (req, res) {
   res.json(emails)
 })
 
-// app.listen(3000)
-app.listen(process.env.PORT)
+app.listen(5000)
+// app.listen(process.env.PORT)
 
 function total (input) {
   var total = 0
